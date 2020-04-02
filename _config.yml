@@ -94,8 +94,8 @@ analytics:
 # Site Author
 author:
   name             : "hongsi"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "To be Data Analyst"
+  avatar           : "/assets/images/hongsi.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  bio              : "우선은 데이터 분석가가 되고 싶은 홍시 입니다."
   location         : "Republic of Korea"
   email            : "hongsy5480@gmail.com"
   links:
