@@ -1,12 +1,12 @@
 # main links
 main:
-  - title: "소개"
+  - title: "About"
     url: /about/
-  - title: "카테고리"
+  - title: "Categories"
     url: /categories/
-  - title: "포스트"
+  - title: "Posts"
     url: /year-archive/
-  - title: "태그"
+  - title: "Tags"
     url: /tags/
 
 
