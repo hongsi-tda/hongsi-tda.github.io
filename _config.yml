@@ -24,7 +24,7 @@ description              : "so many dreams, but first data analyst"
 url                      : "https://hongsi-tda.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
-teaser                   : "/assets/images/hmm.png" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
+teaser                   : "/assets/images/hmm.jpg" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
@@ -75,7 +75,7 @@ facebook:
   username               :
   app_id                 :
   publisher              :
-og_image                 : "/assets/images/hongsi.png" # Open Graph/Twitter default site image
+og_image                 : "/assets/images/hmm.jpg" # Open Graph/Twitter default site image
 # For specifying social profiles
 # - https://developers.google.com/structured-data/customize/social-profiles
 social:
@@ -94,7 +94,7 @@ analytics:
 # Site Author
 author:
   name             : "hongsi"
-  avatar           : "/assets/images/hmm.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/hmm.jpg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "so many dreams, but first data analyst"
   location         : "Republic of Korea"
   email            : "hongsy5480@gmail.com"
