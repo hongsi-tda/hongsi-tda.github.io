@@ -24,8 +24,8 @@ description              : "so many dreams, but first data analyst"
 url                      : "https://hongsi-tda.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
-teaser                   : "/assets/images/hmm.png" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
-logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
+teaser                   : "/assets/images/hongsi.png" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
+logo                     : "/assets/images/hmm.jpg" # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
@@ -94,14 +94,14 @@ analytics:
 # Site Author
 author:
   name             : "hongsi"
-  avatar           : "/assets/images/hmm.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "/assets/images/hongsi.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "so many dreams, but first data analyst"
   location         : "Republic of Korea"
-  email            : "hongsy5480@gmail.com"
+  email            : # "hongsy5480@gmail.com"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
-      # url: mailto:hongsy5480@gmail.com
+      url: mailto:hongsy5480@gmail.com
     - label: "Website"
       icon: "fas fa-fw fa-link"
       # url: "https://your-website.com"
