@@ -2,7 +2,8 @@
 permalink: /about/
 title: "About hongsi"
 excerpt: "to be data analyst"
-layouts_gallery:
+layout: single
+# layouts_gallery:
 #  - url: /assets/images/hmm.png
 #    image_path: /assets/images/mm-layout-splash.png
 #    alt: "splash layout example"
@@ -18,6 +19,8 @@ toc: true
 ---
 ![thinking](../assets/images/hmm.png)
 
-so many dreams, but first data analyst
+## so many dreams, but first data analyst
+This is hongsi's blog to record everyday tryouts to reach out personal goals to be data analyst.
+
 
 > Just Keep Swimming
