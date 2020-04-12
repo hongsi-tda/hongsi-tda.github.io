@@ -1,5 +1,5 @@
 ---
-title: "태그 모음"
+title: "Posts by Tag"
 layout: tags
 permalink: /tags/
 author_profile: true
