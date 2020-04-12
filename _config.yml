@@ -97,11 +97,11 @@ author:
   avatar           : "/assets/images/hongsi.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "so many dreams, but first data analyst"
   location         : "Republic of Korea"
-  email            : "hongsy5480@gmail.com"
+  email            : # "hongsy5480@gmail.com"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
-      # url: mailto:hongsy5480@gmail.com
+      url: mailto:hongsy5480@gmail.com
     - label: "Website"
       icon: "fas fa-fw fa-link"
       # url: "https://your-website.com"
