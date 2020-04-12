@@ -20,7 +20,7 @@ title                    : "hongsi's Study-Log"
 title_separator          : "-"
 subtitle                 : "stepping stone" # site tagline that appears below site title in masthead
 name                     : "hongsi"
-description              : "so many things to wanna be, but first data analyst"
+description              : "so many dreams, but first data analyst"
 url                      : "https://hongsi-tda.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -94,14 +94,14 @@ analytics:
 # Site Author
 author:
   name             : "hongsi"
-  avatar           : "/assets/images/hongsi.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "so many things to wanna be, but first data analyst"
+  avatar           : "/assets/images/hmm.png" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  bio              : "so many dreams, but first data analyst"
   location         : "Republic of Korea"
   email            : "hongsy5480@gmail.com"
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
-      url: mailto:hongsy5480@gmail.com
+      # url: mailto:hongsy5480@gmail.com
     - label: "Website"
       icon: "fas fa-fw fa-link"
       # url: "https://your-website.com"
