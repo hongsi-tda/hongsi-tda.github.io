@@ -24,7 +24,7 @@ description              : "so many dreams, but first data analyst"
 url                      : "https://hongsi-tda.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
-teaser                   : "/assets/images/hongsi.png" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
+teaser                   : "" # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : "/assets/images/pencil.png" # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
