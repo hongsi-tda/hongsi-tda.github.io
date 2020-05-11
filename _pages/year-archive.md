@@ -1,3 +1,6 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:30ea9adea0ef09994c0e0de79d021916035f96f75ce95302779e79cbc8fe0a54
-size 111
+---
+title: "연도별 포스트 모음"
+permalink: /year-archive/
+layout: posts
+author_profile: true
+---

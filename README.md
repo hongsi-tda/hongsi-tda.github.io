@@ -1,3 +1,5 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:26b8eec18167317a7d75821a7f7ea0183aacc727dd2e2866b84c020e7be11f71
-size 216
+# hongsi-tda.github.io
+
+* 홍시의 스터디 블로그 입니다. 
+* [Mastering Markdown](https://guides.github.com/features/mastering-markdown/)
+* [Github 블로그 따라하기](https://devinlife.com/howto/)
