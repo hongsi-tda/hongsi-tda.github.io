@@ -1,0 +1,266 @@
+---
+title: "Statistic Analysis"
+author: "홍서연"
+date: '2020 4 23 '
+output: 
+  rmdformats::readthedown: 
+    number_sections: true
+    self_contained: true
+    lightbox: true
+    gallery: true
+---
+
+# 통계 분석 : 상관성 분석
+
+
+데이터 불러오기
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE,collapse=TRUE}
+library(tidyverse)
+library(gmodels) # crosstable
+
+df <- read_csv('./data/bank_customer_survey.csv')
+
+str(object=df)
+head(x=df, n=10L)
+summary(object=df)
+
+# 'y' factor 형으로 형변환 
+df$y <- as.factor(df$y)
+```
+
+
+## t-검정
+
+목표변수 'y'와 연속형 입력변수와의 상관성 분석을 위해 t-검정을 시행합니다.
+
+> 'y'는 0과 1의 값만 갖는 이산형 변수입니다. 
+
+**연속형 변수**만 확인해봅니다. 
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE,collapse=TRUE}
+varClass <- map_chr(.x=df, .f=class)
+int_loc <- which(x=varClass %in% c('integer', 'numeric'))
+colnames(df[, int_loc])
+```
+
+
+1. 연속형 변수 : age
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE,collapse=TRUE}
+# x: y, y: age --------------
+# table(df$y)
+# table(df$age)
+
+# 정규성 
+# shapiro.test(x=df$age)
+# by(data=df$age, INDICES = df$y, FUN = shapiro.test)
+
+# normality test
+# install.packages('nortest')
+library(nortest)
+ad.test(df$age)
+# p < 0.05 : 귀무가설 기각, 정규분포 하지않는다. 
+
+wilcox.test(formula=age ~ y, data=df)
+# p > 0.05 : 귀무가설 채택, 두집단의 평균은 같다. 
+# but, 데이터의 크기가 30이 넘기 때문에 정규분포 한다고 가정한다. 
+
+# 등분산성
+var.test(formula=age ~ y, data=df)
+# p < 0.05, : 귀무가설 기각, 등분산성 가정 만족 못한다. 
+
+t.test(formula=age ~ y, data=df, 
+       alternative='two.sided',
+       paired=FALSE,
+       var.equal=FALSE)
+# p < 0.05 : 귀무가설 기각, 두 집단의 평균은 다르다. 
+# => 두 집단은 관계가 있다. 
+```
+
+
+2. 연속형 변수 : balance
+
+````{r message=FALSE, warning=FALSE, paged.print=FALSE,collapse=TRUE}
+# x: y, y: balance -----------------
+# table(df$balance)
+
+# 정규성 
+# shapiro.test(x=df$balance)
+# by(data=df$balance, INDICES = df$y, FUN = shapiro.test)
+
+# normality test
+ad.test(df$balance)
+# p < 0.05 : 귀무가설 기각, 정규분포 하지않는다. 
+
+wilcox.test(formula=balance ~ y, data=df)
+# p < 0.05 : 귀무가설 기각, 두집단의 평균은 다르다.
+
+# 등분산성
+var.test(formula=balance ~ y, data=df)
+# p < 0.05, : 귀무가설 기각, 등분산성 가정 만족 못한다. 
+
+t.test(formula=balance ~ y, data=df, 
+       alternative='two.sided',
+       paired=FALSE,
+       var.equal=FALSE)
+# p < 0.05 : 귀무가설 기각, 두 집단의 평균은 다르다. 
+# => 두 집단은 관계가 있다. 
+```
+
+
+3. 연속형 변수 : durtion
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE,collapse=TRUE}
+# x: y, y: duration -----------------
+# table(df$duration)
+
+# 정규성 
+# shapiro.test(x=df$duration)
+# by(data=df$duration, INDICES = df$y, FUN = shapiro.test)
+
+# normality test
+ad.test(df$duration)
+# p < 0.05 : 귀무가설 기각, 정규분포 하지않는다. 
+
+wilcox.test(formula=duration ~ y, data=df)
+# p < 0.05 : 귀무가설 기각, 두집단의 평균은 다르다. 
+
+# 등분산성
+var.test(formula=duration ~ y, data=df)
+# p < 0.05, : 귀무가설 기각, 등분산성 가정 만족 못한다. 
+
+t.test(formula=duration ~ y, data=df, 
+       alternative='two.sided',
+       paired=FALSE,
+       var.equal=FALSE)
+# p < 0.05 : 귀무가설 기각, 두 집단의 평균은 다르다. 
+# => 두 집단은 관계가 있다. 
+```
+
+
+4. 연속형 변수 : campaign
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE,collapse=TRUE}
+# x: y, y: campaign ---------------
+# table(df$campaign)
+
+# 정규성 
+# shapiro.test(x=df$campaign)
+# by(data=df$campaign, INDICES = df$y, FUN = shapiro.test)
+
+# normality test
+ad.test(df$campaign)
+# p < 0.05 : 귀무가설 기각, 정규분포 하지않는다. 
+
+wilcox.test(formula=campaign ~ y, data=df)
+# p < 0.05 : 귀무가설 기각, 두집단의 평균은 다르다. 
+
+# 등분산성
+var.test(formula=campaign ~ y, data=df)
+# p < 0.05, : 귀무가설 기각, 등분산성 가정 만족 못한다. 
+
+t.test(formula=campaign ~ y, data=df, 
+       alternative='two.sided',
+       paired=FALSE,
+       var.equal=FALSE)
+# p < 0.05 : 귀무가설 기각, 두 집단의 평균은 다르다. 
+# => 두 집단은 관계가 있다.
+```
+
+
+5. 연속형 변수 : pdays
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE,collapse=TRUE}
+# x: y, y: pdays -----------------
+# table(df$pdays)
+
+# 정규성 
+# shapiro.test(x=df$pdays)
+# by(data=df$pdays, INDICES = df$y, FUN = shapiro.test)
+
+# normality test
+ad.test(df$pdays)
+# p < 0.05 : 귀무가설 기각, 정규분포 하지않는다. 
+
+wilcox.test(formula=pdays ~ y, data=df)
+# p < 0.05 : 귀무가설 기각, 두집단의 평균은 다르다. 
+
+# 등분산성
+var.test(formula=pdays ~ y, data=df)
+# p < 0.05, : 귀무가설 기각, 등분산성 가정 만족 못한다. 
+
+t.test(formula=pdays ~ y, data=df, 
+       alternative='two.sided',
+       paired=FALSE,
+       var.equal=FALSE)
+# p < 0.05 : 귀무가설 기각, 두 집단의 평균은 다르다. 
+# => 두 집단은 관계가 있다.
+```
+
+
+6. 연속형 변수 : previous
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE,collapse=TRUE}
+# x: y, y: previous ---------------
+# table(df$previous)
+
+# 정규성 
+# shapiro.test(x=df$previous)
+# by(data=df$previous, INDICES = df$y, FUN = shapiro.test)
+
+# normality test
+ad.test(df$pdays)
+# p < 0.05 : 귀무가설 기각, 정규분포 하지않는다. 
+
+wilcox.test(formula=pdays ~ y, data=df)
+# p < 0.05 : 귀무가설 기각, 두집단의 평균은 다르다. 
+
+# 등분산성
+var.test(formula=pdays ~ y, data=df)
+# p < 0.05, : 귀무가설 기각, 등분산성 가정 만족 못한다. 
+
+t.test(formula=pdays ~ y, data=df, 
+       alternative='two.sided',
+       paired=FALSE,
+       var.equal=FALSE)
+# p < 0.05 : 귀무가설 기각, 두 집단의 평균은 다르다. 
+# => 두 집단은 관계가 있다.
+```
+
+모든 변수가 상관성이 있어 보입니다. 
+
+
+## 카이제곱 검정
+
+목표변수 'y'와 범주형 입력변수와의 상관성 분석을 위해 카이제곱 검정을 시행합니다.
+
+**범주형 변수**만 확인해봅니다. 
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE,collapse=TRUE}
+chr_loc <- which(x=varClass %in% c('character'))
+colnames(df[, chr_loc])
+```
+
+
+1. Cross Table 그리기
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE,collapse=TRUE}
+# cross table ----------------------
+map(.x=df[, chr_loc], 
+    .f=function(x) CrossTable(x=x, y=df$y))
+```
+
+
+2. 카이제곱 검정 시행하기
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE,collapse=TRUE}
+# 카이제곱검정 ---------------------
+map(.x=df[, chr_loc], 
+    .f=function(x) chisq.test(x=x, y=df$y))
+# 모두 p < 0.05 : 귀무가설 기각, 두변수간 독립이다. 
+```
+
+모든 범주형 변수도 상관성이 있어 보입니다. 
+
+데이터 수집시 컬럼이 가진 의미를 통해 필요없는 컬럼을 제거해야 합니다. 
