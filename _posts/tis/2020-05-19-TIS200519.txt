@@ -1,0 +1,114 @@
+---
+title:  "TIS 200519"
+excerpt:  "그룹 함수, 윈도우 함수"
+
+categories:
+  - TIS
+tags:
+  - SQL
+  
+toc: true
+toc_sticky: true
+---
+
+## Today I Studied 2020.05.19
+
+
+### 그룹 함수
+
+ROLLUP | CUBE | GROUPING SETS
+-------|------|------------------
+subtotal | 결합 가능한 모든 집계 | 더욱 다양한 소계
+계층구조 (인수 순서에 주의) | 평등한 구조 | 평등한 구조
+`n -> n+1` | `n -> 2^n` | 괄호별 집계
+(with) GROUPING, CASE / DECODE | = UNION ALL | not applied
+
+CUBE 는 시스템 부하를 높인다는 단점이 있지만,<br>
+* 이전에는 4번의 쿼리에 걸쳐 가능했던 것이 한번에 접근 가능해지고
+* 수행 속도와 자원 사용률을 높이며
+* 가독성을 높인다는
+
+장점이 있습니다. 
+
+```sql
+--rollup
+GROUP BY ROLLUP (DNAME, JOB);
+GROUP BY DNAME, ROLLUP (JOB);
+
+--cube
+GROUP BY CUBE (DNAME, JOB);
+
+--grouping sets
+GROUP BY GROUPING SETS ((DNAME, JOB, MGR), (DNAME, JOB), (JOB, MGR));
+```
+
+
+### 윈도우 함수
+
+윈도우함수는 분석함수 또는 순위함수라고 불리며
+
+행간 비교 / 연산 하는데 사용됩니다. 
+
+중첩은 불가능하지만, 서브쿼리 내 사용은 가능합니다.
+
+그룹내 순위 | 그룹내 집계 | 그룹내 행 순서 | 그룹내 비율 
+-----------|-----------|---------------|-----------
+RANK, DENSE_RANK, ROW_NUMBER | SUM, MIN, MAX, AVG, COUNT | FIRST_VALUE, LAST_VALUE, LAG, LEAD | RATIO_TO_REPORT, PERCEPT_RANK, CUME_DIST, NTILE
+
+그 외 선형분석을 포함한 통계 분석 관련 함수가 있습니다.
+
+기초 syntax :<br>
+```sql
+SELECT WINDOW_FUNCTION (ARGUMENTS) 
+  OVER ( 
+    [PARTITION BY 컬럼] 
+    --기준으로 소그룹 분류
+    [ORDER BY 절] 
+    [WINDOW 절] )
+    --행 기준의 범위 지정
+  FROM 테이블명;
+```
+
+SQL Server 에서는 지원하지 않습니다.
+
+
+#### 그룹내 순위 함수
+
+함수 | 설명
+-----|-------
+RANK | 특정 컬럼에 대한 순위 구하기, 동일한 값은 동일한 순위 부여
+DENSE_RANK | 동일한 순위를 하나의 건수로 취급
+ROW_NUMBER | 동일한 값이라도 고유한 순위 부여
+
+
+#### 그룹내 집계 함수
+
+SUM, MIN, MAX(인라인 뷰 사용 가능), ...
+
+```sql
+--avg : 해당 데이터 전후로 평균값 구하기
+ROUND (AVG(SAL) OVER (PARTITION BY MGR ORDER BY HIREDATE 
+                        ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING))
+
+--count : 모든 건수 대상으로 -50 ~ +150 사이에 들어가는지 확인
+COUNT(*) OVER (ORDER BY SAL RANGE BETWEEN 50 PRECEDING AND 150 FOLLOWING) 
+```
+
+
+#### 그룹내 행 순서 함수
+
+함수 | 설명
+-----|-------
+FIRST_VALUE, LAST_VALUE | 가장 먼저 / 나중에 나온 값 구함, MIN / MAX 와 유사 but 공동 등수 인정 (X)
+LAG, LEAD | 이전 / 이후 몇번째 행 가져옴, 인자 : (컬럼, 몇 번째, NULL일 경우 대체값)
+
+
+#### 그룹내 비율 함수
+
+함수 | 설명
+----|-------
+RATIO_TO_RANK | SUM(컬럼)에 대한 값을 백분율 구함, `> 0 & <= 1`, 합 = 1
+PERCENT_RANK | 행의 순서로 백분율 구함(가장 먼저 나오는게 0), `>= 0 & <= 1`, 사이로 구간 나눔
+CUME_DIST | 행의 순서로 누적 백분율 구함, `> 0 & <= 1`, 전체 건수로 구간 나눔
+NTILE | 전체 건수를 N 등분 
+

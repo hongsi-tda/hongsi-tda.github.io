@@ -1,0 +1,251 @@
+---
+title:  "TIS 200520"
+excerpt:  "DCL, 절차형 SQL"
+
+categories:
+  - TIS
+tags:
+  - SQL
+  
+toc: true
+toc_sticky: true
+---
+
+## Today I Studied 2020.05.20
+
+
+### DCL
+
+> Data Control Language
+
+유저를 생성하고 권한을 제어합니다. 
+
+특정 데이터베이스를 공유해야 하는 경우,<br>
+새로운 유저를 생성하고 공유할 테이블이나 오브젝트에 대한 권한을 부여하는데 사용됩니다. 
+
+Oracle 에서는 SCOTT(테스트용 샘플), SYS(DBA ROLE 부여받은), SYSTMEM(모든 시스템 원한 부여받은) 유저를 제공합니다. 
+
+
+#### 유저 생성과 시스템 권한 부여
+
+유저를 생성하려면 먼저 유저 생성 권한(CREATE USER)이 있어야 합니다. 
+
+```sql
+GRANT CREATE USER TO SCOTT;
+--유저 생성 권한 부여
+
+CREATE USER PJS IDENTIFIED BY KOREA7;
+--아이디가 PSJ, 패스워드가 KOREA7 인 유저 생성
+```
+
+SQL Server 는 유저 생성 전 먼저 로그인 해야 합니다. 
+
+로그인 하면서 최초로 접속할 데이터베이스를 지정해 줍니다. 
+
+해당 데이터베이스에서 유저를 생성해 줍니다. 
+
+로그인 하려면 CREATE SESSION 권한을,<br>
+테이블 만들려면 CREATE TABLE 권한을 부여받아야 합니다. 
+
+
+#### 오브젝트 권한
+
+객체 권한 | 테이블 | VIEWS | SEQUENCE | PROCEDURE
+---------|-------|-------|----------|-----------
+ALTER | O |  | O |  
+DELETE | O | O |  |  
+EXECUTE |   |  |  | O 
+INDEX | O |  |  |  
+INSERT | O | O |  |  
+REFERENCES | O |  |  |  
+SELECT | O | O | O |  
+UPDATE | O | O |  |  
+
+*위 테이블은 오라클에 해당하고, SQL Server 는 DELETE 에 FUNCTION 이 추가된 형태*
+
+오브젝트는 유저가 소유하는 것이 아니라 스키마가 소유하며,<br> 
+유저는 스키마에 대한 특정 권한을 가지게 되는 것입니다.  
+
+**소유자.객체**
+
+오브젝트 권한은 SELECT, INSERT, DELETE, UPDATE 등의 권한을 따로 관리합니다.
+
+
+#### ROLE 권한 부여
+
+모든 DDL 문장을 사용하려면 해당 시스템 권한이 있어야 하며,<br>
+100개 이상의 시스템 권한을 일일히 부여하기 보다 ROLE 을 이용해 간편하게 권한을 부여합니다. 
+
+DB 관리자는 ROLE 을 생성해 다양한 권한을 미리 부여해놓고,<br>
+다른 ROLE 이나 유저에게 부여할 수 있습니다. 
+
+ROLE 에는 시스템 권한과 오브젝트 권한 모두 부여할 수 있습니다.
+
+권한을 취소할 때는 **REVOKE**
+
+Oracle 은 기본적으로 CONNECT 와 RESOURCE 라는 ROLE 을 제공합니다.
+
+유저를 삭제하려면 DROP USER 를 쓰고,<br>
+CASCADE 옵션을 주면 해당 유저가 생성한 오브젝트 부터 삭제한 후 유저를 삭제합니다. 
+
+SQL Server 에서는 인스턴스 수준의 작업의 경우 서버 수준 역할을,<br>
+데이터베이스 수준(< 인스턴스)의 작업의 경우 데이터베이스 수준 역할을 부여합니다. 
+
+
+### 절차형 SQL
+
+**PL/SQL(Oracle), SQL/PL, T-SQL(SQL Server)**
+
+절차형 SQL 을 활용해 쿼리문 연속 실행이나 조건에 따른 분기처리를 위한 저장 모듈을 생성할 수 있습니다. 
+
+
+#### PL/SQL
+
+특징 :<br>
+- block 구조로 기능별 모듈화 가능
+- 한번에 block으로 묶어 보내 통신량 줄임
+- 변수, 상수 등을 선언해 값 교환
+- IF, LOOP 등 절차형 언어 사용
+- 에러 정의 가능
+- Oracle 내장이라 어떤 서버에든 옮길 수 있음
+- 응용 프로그램 성능 향상
+- PL/SQL 과 SQL 작업을 분리하여 처리
+- DECLARE(선언부), BEGIN ~ END(실행부), EXCEPTION(에러 등 예외 처리부)
+
+기본 syntax :<br>
+```sql
+--프로시저 생성
+CREATE [OR REPLACE] Procedure [Procedure_name] (
+  --OR REPLACE : 같은 이름 있으면 덮어 씌운다는 의미
+  argument1 [mode] data_type1, argument2 [mode] data_type2, ... )
+  --mode : IN(프로시저로 들어올) / OUT(운영체제로 나갈) / INOUT
+  IS [AS] ... 
+  BEGIN ...
+  EXCEPTION ...
+  END; /
+  --"/" : 데이터베이스로 컴파일하라는 명령어
+
+--프로시저 삭제
+DROP Procedure [Procedure_name];
+```
+
+
+#### T-SQL
+
+특징 :<br>
+- SQL 서버에 내장되는 전역변수(시스템 함수)와 연결된 동안만 사용 가능한 지역변수로 나뉨
+- 데이터 유형(int, float, varchar 등) 제공
+- 산술 연산자, 비교 연산자, 논리 연산자 사용 가능
+- IF ~ ELSE, WHILE, CASE ~ THEN 등 사용 가능
+- `:/*내용*/`, `:-주석범위`
+- DECLARE(선언부), BEGIN ~ END(실행부); 블록단위로 처리하고자 할때, EXCEPTION(에러 등 예외 처리부)
+
+기본 syntax :<br>
+```sql
+CREATE Procedure [schema_name.]Procedure_name @parameter1 data_type1 [mode],
+                                              @parameter2 data_type2 [mode], ...
+--변경시 CREATE -> ALTER
+--[mode] 4가지
+--VARYING, DEFAULT, OUT / OUTPUT, READONLY
+  WITH AS ... 
+  --WITH 3가지
+  --RECOMPILE, ENCRYPTION, EXECUTE AS
+  BEGIN ...
+  ERROR 처리 ...
+  END;
+
+DROP Procedure [schema_name.]Procedure_name;
+```
+
+
+#### Procedure
+
+Flow :<br>
+1. input -> 존재하는지 check -> 없으면 데이터 입력 -> commit -> 입력완료! -> 종료
+2. input -> 존재하는지 check -> 있으면 -> 종료
+3. input -> 존재하는지 check -> 에러 나면 -> 종료 -> 에러 메시지 출력
+
+```sql
+--Oracle
+CREATE OR REPLACE Procedure p_DEPT_insert (
+  v_DEPTNO in number, v_DNAME in varchar2, v_LOC in varchar2, v_RESULT out varchar2)
+  IS CNT number := 0;
+  BEGIN SELECT COUNT(*) INTO CNT
+    FROM DEPT WHERE DEPTNO = v_DEPTNO AND ROWNUM = 1;
+  IF CNT > 0
+    THEN v_RESULT := '이미 등록된 부서번호이다.'
+    ELSE INSERT INTO DEPT (DEPTNO, DNAME, LOC)
+      VALUES (v_DEPTNO, v_DANAME, v_LOC);
+      COMMIT; v_RESULT := '입력완료!';
+  END IF;
+  EXCEPTION
+    WHEN OTHERS THEN ROLLBACK; v_RESULT := 'ERROR 발생'; 
+  END; /
+```
+
+**주의!**<br>
+- 스칼라 변수는 임시 데이터 하나만 저장 가능
+- SELECT 만 결과값이 반드시 존재해야 함 (단, T-SQL 에서는 오류 안남)
+- PL/SQL 에서는 등호 대신 `:=` 사용
+- 에러 처리시 OTHERS 이용해 모든 에러 처리 가능 (but, 정확하게 처리하기 권장)
+
+
+#### User Defined Function
+
+프로시저와 다른 점은 RETURN 이용해 하나의 값을 반드시 되돌려줘야 한다는 것입니다.
+
+```sql
+--SQL Server
+CREATE Function dbo.UTIL_ABS (@v_input int)
+  RETURN int AS 
+  BEGIN DECLARE @v_return int 
+    SET @v_return = 0 
+      IF v_input < 0
+        SET @v_return = @v_input * -1
+      ELSE
+        SET @v_return = @v_input 
+    RETURN @v_return; 
+  END;
+```
+
+
+#### Trigger
+
+```sql
+--Oracle
+CREATE OR REPLACE Trigger SUMMARY_SALES
+  AFTER INSERT ON ORDER_LIST
+  FOR EACH ROW 
+  DECLARE 
+    o_date ORDER_LIST.order_date%TYPE;
+    o_prod ORDER_LIST.product%TYPE;
+  BEGIN o_date := :NEW.order_date;
+        o_prod := :NEW.product;
+    UPDATE SALES_PER_DATE
+      SET qty = qty + :NEW.qty, amount = amount + :NEW.amount
+        WEHRE sale_date = o_date AND product = o_prod;
+      IF SQL %NOTFOUND 
+        THEN INSERT INTO SALES_PER_DATE
+          VALUES (o_date, o_prod, :NEW.qty, :NEW.amount);
+      END IF;
+  END; /
+```
+
+구분 | :OLD(deleted) | :NEW(inserted)
+----|------|-------
+INSERT | NULL | 입력된 레코드 값
+UPDATE | UPDATE 전 레코드 값 | UPDATE 후 레코드 값
+DELETE | 레코드 삭제되기 전 값 | NULL
+
+
+#### 프로시저와 트리거의 차이
+
+프로시저 | 트리거
+--------|----------
+CREATE Procedure 문법 사용 | CREATE Trigger 문법 사용
+EXECUTE 명령어로 실행 | 생성 후 자동으로 실행
+COMMIT, ROLLBACK 실행 가능 | COMMIT, ROLLBACK 실행 불가능
+
+트리거는 하나의 트랜젝션 안에서 일어나는 일련의 작업 속 포함되어 있는 형태이므로 단독으로 COMMIT, ROLLBACK 이 불가능합니다.
+
+
