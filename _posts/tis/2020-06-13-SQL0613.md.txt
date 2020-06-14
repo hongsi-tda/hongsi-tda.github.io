@@ -1,0 +1,237 @@
+---
+title:  "TIS 200613"
+excerpt:  "Class 03"
+
+categories:
+  - TIS
+tags:
+  - SQL
+  
+toc: true
+toc_sticky: true
+---
+
+## SQL Class Notes 2020.06.13
+
+by 러닝스푼즈 김경수 강사님
+
+
+### [Functions](https://docs.oracle.com/cd/B19306_01/server.102/b14200/functions001.htm)
+
+
+#### Single Row Functions
+
+`y = f(x)`
+
+Arguments & Return
+
+Return 
+
+중첩 사용 가능
+
+```sql 
+ADD_MONTHS(HIREDATE, -12 * 10)
+HIREDATE -(365 * 10)
+LAST_DAY(ADD_MONTHS(HIREDATE -12 * 10))
+TO_CHAR(LAST_DAY(ADD_MONTHS(HIREDATE -12*10)))
+```
+
+* text functions
+
+```sql 
+LOWER(char)
+UPPER(char)
+CONCAT(char1, char2)
+
+SUBSTR(char, position, [, length])
+--with [] : 생략 가능
+--if so cut to the last 
+REPLACE(char, search, string, [, replace_string])
+--if so replace to null
+
+LPAD(expr1, n, [, expr2])
+--add by n to expr1 and replace it with expr2 from left end
+RPAD(expr1, n, [, expr2])
+--add by n to expr1 and replace it with expr2 from right end
+
+LTRIM(char, [, set])
+--trim set from char from left end
+RTRIM(char, [, set])
+--trim set from char from right end
+TRIM([LEADING | TRAILING | BOTH], [set], [FROM])
+
+LENGTH(char)
+INSTR(char, search_string, [, position [, occurance]])
+--how many times certain word is occurring
+--start from position, count 
+```
+
+* numeric functions
+
+```sql 
+ROUND(n1 [, n2])
+--if n2 < 0, decimal point 
+--반올림
+TRUNC(n1 [, n2])
+--버림
+
+CEIL(n)
+--올림
+FLOOR(n)
+--내림
+
+MOD, POWER, SQRT, ...
+```
+
+* date functions
+
+```sql 
+SYSDATE
+
+ROUND(date [, fmt])
+--2018/07/16 12:30:30(기준)
+TRUNC(date [, fmt])
+
+NEXT_DAY(date, n)
+--n=1 : sunday
+--n=7 : saturday
+LAST_DAY(date)
+
+ADD_MONTHS(date, n)
+MONTHS_BETWEEN(date1, date2)
+```
+
+* conversion functions
+
+```sql 
+TO_CHAR(n [, fmt])
+TO_CHAR(date [, fmt])
+--fixed : 0, depending on origin : 9
+--'YYYY/MM/DD HH24:MI:SS', 'DAY'
+
+TO_NUMBER(char)
+TO_DATE(char [, fmt])
+
+CAST(expr AS type_name)
+```
+
+> Implicit Type conversion vs. Explicit 
+
+DBMS implicitly converts data type for calculation or comparison.
+
+This might lead into unexpected or unintended conversion. 
+
+Therefore, Explicit Type Conversion is more recommended.
+
+* null
+
+```sql 
+NVL(expr1, expr2)
+--null = expr2, if not = expr1
+NVL2(expr1, expr2, expr3)
+--null = expr3, if not = expr2
+
+COALESCE(expr1, expr2 [, expr3 ...])
+--find first not null value
+NULLIF(expr1, expr2)
+--expr1 = expr2 : NULL, if not : expr1
+--create null value
+```
+
+* condition (if)
+
+```sql 
+DECODE(expr, search1, result1
+		[, search2, result2 ...] [, default])
+
+CASE()
+--simple <<< search
+--always first one in priority
+```
+
+
+### GROUP by
+
+group of rows -> grouping
+
+```sql
+SELECT job, SUM(sal), MAX(sal), MIN(sal)
+  FROM emp
+ GROUP BY job;
+ --equal value within the group
+ --criterion for grouping
+```
+
+* aggregate functions
+
+`COUNT, SUM, AVG, MAX, MIN`
+
+Null value is ignored in aggregate calculation.
+
+If all values are null, then result is also null.<br>
+*except COUNT(0)*
+
+Calculation within aggregate functions happens before grouping.
+
+```sql
+SUM(NVL(comm, 0)) AS SUM_NVL_COMM
+```
+So that the final value might be miscalculated. 
+
+In this case, perform `NVL` at the end. 
+
+```sql
+NVL(SUM(comm), 0)
+```
+
+If use aggregate functions without group by, grouped the entire data.
+
+For `COUNT(*)`, null values are included.
+
+LISTAGG(expr, 'delimiter') WITHIN GROUP(order_by_clause)
+
+Using CASE, PIVOT (partial aggregation)
+
+* having : condition for group(s)
+
+
+### JOIN
+
+repeatedlt LOOKUP 후행 집합을
+
+based on relationships (PK, FK) 
+
+
+* inner join (successful rows from JOIN)
+
+#### Equi Join 
+
+1:M -> for 1, 1 * M copied
+
+M:N -> row increases for both sides<br>
+*b/c wrongly constructed or written for JOIN condition*
+
+* JOIN among tables 3 or more : always JOIN between 2 tables each
+
+#### Non-Equi Join
+
+BETWEEN 
+
+* outer join = innter join + alpha(failed rows from JOIN)
+
+(+)가 없는 쪽을 살리겠다는 의미 
+
+
+* cross join = cartesian product (M * N)
+
+there's no Join condition. 
+
+
+### Assignment : 
+
+* class note review
+
+* functon questions complete
+
+* join questions complete
+
