@@ -1,0 +1,167 @@
+---
+title:  "TIS 200617"
+excerpt:  "resample"
+
+categories:
+  - TIS
+tags:
+  - Python
+  - 기초
+  
+toc: true
+toc_sticky: true
+---
+
+## Today I Studied 2020.06.17
+
+### resample
+
+what is the function of **resample**?
+
+resample is for handling **time series data!**
+
+resample groups(aggregates) & summarises data by specific time span(10 min, 20 min, 1 hour, 1 day, 1 month etc.).
+
+
+#### how to use 'resample'
+
+<img width="295" alt="resample-q" src="https://user-images.githubusercontent.com/59638493/84868823-3782a000-b0b8-11ea-9878-e53f96dad5fc.png">
+
+time | fmt
+-----|--------
+5 min | resample('5T')
+10 min | resample('10T')
+20 min | resample('20T')
+1 hour | resample('1H')
+1 day | resample('1D')
+1 week | resample('1W')
+1 month | resample('1M')
+1 year | resample('1Y')
+
+
+```python
+train.resample('10T').first()
+# shows first row's value by 10 min
+
+train.resample('10T').last()
+# shows last row's value by 10 min
+# similar to groupby-apply
+
+train.resample('10T').sum() # total
+train.resample('10T').sum().cumsum() # cumulative
+
+train.resample('10T').min()
+train.resample('10T').max()
+train.resample('10T').mean()
+train.resample('10T').median()
+
+train.resample('10T').var() # variance
+sqrt(train.resample('10T').var()) # std 
+```
+
+
+#### create user defined functions for summary statisitics
+
+```python 
+def resample_summary(ts_data, col_nm, time_span, func_list):
+
+    
+
+    import numpy as np
+
+    import pandas as pd
+
+    
+
+    df_summary = pd.DataFrame() # blank DataFrame to store results
+
+    
+
+    # resampler with column name by time span (group by)
+
+    resampler = ts_data[col_nm].resample(time_span)
+
+    
+
+    # aggregation functions with suffix name
+
+    if 'first' in func_list:
+
+        df_summary[col_nm + '_' + time_span + '_first'] = resampler.first()
+
+    
+
+    if 'last' in func_list:
+
+        df_summary[col_nm + '_' + time_span + '_last'] = resampler.last()
+
+        
+
+    if 'sum' in func_list:
+
+        df_summary[col_nm + '_' + time_span + '_sum'] = resampler.sum()
+
+        
+
+    if 'cumsum' in func_list:
+
+        df_summary[col_nm + '_' + time_span + '_cumsum'] = resampler.sum().cumsum()
+
+        
+
+    if 'min' in func_list:
+
+        df_summary[col_nm + '_' + time_span + '_min'] = resampler.min()
+
+        
+
+    if 'max' in func_list:
+
+        df_summary[col_nm + '_' + time_span + '_max'] = resampler.max()
+
+    
+
+    if 'mean' in func_list:
+
+        df_summary[col_nm + '_' + time_span + '_mean'] = resampler.mean()
+
+        
+
+    if 'median' in func_list:
+
+        df_summary[col_nm + '_' + time_span + '_median'] = resampler.median()
+
+        
+
+    if 'range' in func_list:
+
+        df_summary[col_nm + '_' + time_span + '_range'] = resampler.max() - resampler.min()
+
+        
+
+    if 'var' in func_list:
+
+        df_summary[col_nm + '_' + time_span + '_var'] = resampler.var() # sample variance
+
+        
+
+    if 'stddev' in func_list:
+
+        df_summary[col_nm + '_' + time_span + '_stddev'] = np.sqrt(resampler.var())
+
+    
+
+    return df_summary
+```
+
+
+#### caculation 
+
+max - min 
+
+weighted average : sum / sum
+
+
+* Reference : 
+    - [pandas.DataFrame.resample — pandas 1.0.4 documentation](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.resample.html)
+    - [R, Python 분석과 프로그래밍의 친구 (by R Friend)](https://rfriend.tistory.com/494)
